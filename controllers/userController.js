@@ -290,4 +290,36 @@ exports.deleteUser = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+// Actualizar contraseña del usuario
+exports.updatePassword = async (req, res, next) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    // Obtener usuario actual con contraseña
+    const user = await User.findById(req.user.id).select('+password');
+
+    // Verificar contraseña actual
+    if (!(await user.comparePassword(currentPassword))) {
+      return next(new AppError('La contraseña actual es incorrecta', 401));
+    }
+
+    // Actualizar contraseña
+    user.password = newPassword;
+    await user.save();
+
+    // Iniciar sesión con nuevo token
+    createSendToken(user, 200, res);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Cerrar sesión
+exports.logout = (req, res) => {
+  res.status(200).json({
+    status: 'success',
+    message: 'Sesión cerrada correctamente'
+  });
 }; 

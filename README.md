@@ -137,7 +137,7 @@ show dbs
 ### Usar una base de datos específica
 
 ```
-use servicios-locales
+use guia_servicios_locales
 ```
 
 ### Ver colecciones en la base de datos actual

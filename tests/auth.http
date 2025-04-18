@@ -22,6 +22,19 @@ Content-Type: application/json
   "password": "Password123!"
 }
 
+### crea usuario administrador
+# @name registerAdmin
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "Administrador Prueba", 
+  "email": "admin@admin.com",
+  "password": "AdminPass123!",
+  "role": "admin"
+}
+
+
 ### Inicio de sesión (administrador)
 # @name loginAdmin
 POST {{baseUrl}}/auth/login
@@ -32,9 +45,13 @@ Content-Type: application/json
   "password": "AdminPass123!"
 }
 
-### Obtener perfil de usuario actual
+### Obtener perfil de usuario actual normal
 GET {{baseUrl}}/auth/me
 Authorization: Bearer {{login.response.body.token}}
+
+### Obtener perfil de usuario actual administrador
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{loginAdmin.response.body.token}}
 
 ### Actualizar detalles de usuario
 PATCH {{baseUrl}}/auth/updatedetails
