@@ -208,11 +208,34 @@ exports.getService = async (req, res, next) => {
   }
 };
 
+// Obtener servicios del usuario actual
+exports.getMyServices = async (req, res, next) => {
+  try {
+    const services = await Service.find({ provider: req.user.id });
+    
+    res.status(200).json({
+      status: 'success',
+      results: services.length,
+      data: {
+        services
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // Crear un nuevo servicio
 exports.createService = async (req, res, next) => {
   try {
     // Añadir provider automáticamente
     req.body.provider = req.user.id;
+    
+    // Verificar que el usuario no tenga ya un servicio registrado
+    const existingServices = await Service.find({ provider: req.user.id });
+    if (existingServices.length > 0) {
+      return next(new AppError('Ya tienes un servicio registrado. No puedes crear más de uno.', 400));
+    }
     
     // Verificar que la categoría existe
     if (req.body.category) {

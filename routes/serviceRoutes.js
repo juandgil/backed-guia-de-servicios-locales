@@ -10,7 +10,8 @@ const {
   getServicesByCategory,
   searchServices,
   uploadServiceImages,
-  resizeServiceImages
+  resizeServiceImages,
+  getMyServices
 } = require('../controllers/serviceController');
 const { protect, restrictTo } = require('../middleware/authMiddleware');
 const reviewRouter = require('./reviewRoutes');
@@ -23,10 +24,15 @@ router.get('/', getAllServices);
 router.get('/featured', getFeaturedServices);
 router.get('/category/:categoryId', getServicesByCategory);
 router.get('/search', searchServices);
-router.get('/:id', getService);
 
 // Rutas protegidas
 router.use(protect);
+
+// Ruta para obtener servicios del usuario autenticado
+router.get('/my-services', getMyServices);
+
+// Ruta pública para obtener un servicio específico (debe ir después de las rutas específicas)
+router.get('/:id', getService);
 
 // Rutas para proveedores de servicios
 router.post('/', 

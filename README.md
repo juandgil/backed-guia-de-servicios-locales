@@ -8,6 +8,8 @@ Backend del proyecto de servicios locales para gestionar categorías, servicios,
 - [Configuración](#configuración)
 - [Iniciar el servidor](#iniciar-el-servidor)
 - [Base de datos MongoDB](#base-de-datos-mongodb)
+- [Datos de Ejemplo](#datos-de-ejemplo)
+- [Gestión de Imágenes](#gestión-de-imágenes)
 - [Pruebas con REST Client](#pruebas-con-rest-client)
 - [Comandos básicos de MongoDB Shell](#comandos-básicos-de-mongodb-shell)
 
@@ -88,6 +90,51 @@ La base de datos se creará automáticamente al iniciar el servidor, pero tambi�
 mongo
 use servicios-locales
 ```
+### Crea los datos iniciales con
+
+```
+npm run seed
+```
+
+## Datos de Ejemplo
+
+El script `seed.js` ubicado en `backend/data/` se utiliza para poblar la base de datos con información inicial:
+
+- **Categorías**: Electricistas, Plomeros, Carpinteros, etc.
+- **Usuarios**: Administrador, usuarios regulares y proveedores de servicios
+- **Servicios**: Servicios de ejemplo para cada categoría
+- **Reseñas**: Opiniones de ejemplo para los servicios
+
+Para modificar los datos iniciales:
+
+1. Edita el archivo `backend/data/seed.js`
+2. Ejecuta `npm run seed` para aplicar los cambios
+
+## Gestión de Imágenes
+
+### Cómo funciona el almacenamiento de imágenes
+
+1. **Referencias en la base de datos**: 
+   - Los servicios almacenan las rutas de las imágenes en los campos `mainImage` y `images[]`.
+   - Estas rutas son relativas a la carpeta de assets del frontend.
+
+2. **Imágenes predeterminadas**:
+   - Por defecto, todos los servicios utilizan la imagen ubicada en `/assets/img/imagen_default.webp` (fronted_angular)
+
+3. **Carga de imágenes**:
+   - El backend utiliza Multer para gestionar la carga de archivos.
+   - Los archivos se almacenan en `backend/public/uploads/`.
+   - Las rutas se almacenan como URLs relativas en la base de datos.
+
+### Configuración de Multer
+
+El middleware para la carga de archivos está configurado en `backend/middleware/uploadMiddleware.js`:
+
+- Límite de tamaño: 5MB por archivo
+- Formatos permitidos: jpg, jpeg, png, webp
+- Destino: `backend/public/uploads/`
+
+3. Ejecuta `npm run seed` para aplicar los cambios
 
 ## Pruebas con REST Client
 
